@@ -12,7 +12,7 @@ func OnConfigToml(configFilePath string) {
 	var configTmpl = `# This is a TOML config file.
 # For more information, see https://github.com/toml-lang/toml
 
-proxy_app = "trade"
+proxy_app = "tcp://0.0.0.0:46658"
 moniker = "anonymous"
 node_laddr = "tcp://0.0.0.0:46656"
 seeds = ""

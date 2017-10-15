@@ -28,8 +28,6 @@ func OnBlockStore(startHeight int) {
 
 		nBlock := NewBlockFromOld(i, lastBlockID)
 		blockParts := nBlock.MakePartSet(types.DefaultBlockPartSize)
-		// or another sln
-		// nBlock, blockParts := NewBlockFromOld2(i, lastBlockID)
 		nMeta := types.NewBlockMeta(nBlock, blockParts)
 		// seen this BlockId's commit
 		seenCommit := NewSeenCommit(i, &nMeta.BlockID)
