@@ -1,6 +1,47 @@
 # tm-tools
 
-tendermint data
+There are 2 tools for tendermint data:
+
+* **tm-migrator**: migrate tendermint data from `v0.7.3` to `v0.10.0`
+* **tm-viewer**: view tendermint data in `blockstore.db` or `state.db`
+
+## tm-migrator
+
+```
+Usage: tm_migrator -old tmroot -new tmroot -priv priv_dir [-s startHeight]
+
+	-old tmroot: dir of old tendermint root
+	-new tmroot: dir of new tendermint root to store converted data
+	-priv priv_dir: dir to place other validators's `priv_validator.json`
+	-s startHeight: from which height to convert tendermint data, default is `1`
+```
+
+Q: Why need `priv` arg?
+
+A: A blockchain may consistes of one or more nodes. For every block, each node will verify `SeenCommit` and `Commit` which was produced by all validators before adding to blockchain. While `SeenCommit` and `Commit` were signed by validator, without other validators' `priv_validator.json` config info, this validaotr cannot reconstruct `SeenCommit` and `Commit` infos of the block.
+
+## tm-viewer
+
+```
+Usage: $ tm_view -db /path/of/db [-a get|getall|block] [-q key] [-d] [-v new|old] [-t height]
+
+// -db : db，Note: the db path cannot end with "/"
+// [-a get|getall|block]： read the value of a key | output all keyes | read block info
+// [-q key] ：key format, please see following "Tendermint data" section
+// [-d]: whether decode value，default is "false"
+// [-v new|old] ：new(0.10.0), old(0.7.3), default is "new"
+// [-t height]: block height，workes with "-a block" arg to read block info at height "N"
+
+examples：
+$ tm_view -db /path/of/blockstore.db -a getall 
+$ tm_view -db /path/of/blockstore.db -a block -t 1 -d 
+$ tm_view -db /path/of/blockstore.db -q "H:1" -d -v old 
+$ tm_view -db /path/of/state.db -q "stateKey" -d -v old 
+```
+
+## Tendermint data
+
+In tendermint root dir(by default, is `~/.tendermint`), tendermint data is placed in its subdir `data/blockstore.db` or `data/state.db`. 
 
 ```
 Allen@MacBook-Pro:~ ls -l ~/.tendermint.v0.10.0/data/
@@ -19,23 +60,33 @@ drwxr-xr-x   8 Allen  staff     272 Oct 15 20:22 blockstore.db
 drwxr-xr-x  10 Allen  staff     340 Oct 15 20:22 state.db
 ```
 
-```
-state.db
-stateKey:....
-abciResponsesKey(0.10.0 only)
+`state.db` is used to store `state` info, the leveldb keyes are:
 
-blockStore.db
-blockStore:{"Height":32}
-C:0 ....C:31
-H:1 ... H:32
-P:1:0 ....P:32:0
-SC:1 ....SC:32
+* "stateKey"
+* "abciResponsesKey"(v0.10.0 only)
 
-SC:1 ....SC:14
-C:0 ....C:13
-```
+`blockStore.db` is used to store `block` info, the leveldb keyes are(assuming the blockchain height is 32):
 
-Commit & SeenCommit
+* "blockStore": blockchain height info. {"Height":32}
+* "H:1"   ... "H:32": block meta info, 
+* "P:1:0" ... "P:32:0": block part info. Block may be sliced to several parts, for each part, the key is "P:{height}:{partIndex}", partIndex start from `0`.
+* "SC:1"  ... "SC:32": block seen commit info.
+* "C:0"   ... "C:31": block commit info.
+
+| key format | value type | examples | 
+| ---- |-----| ---- |
+| `stateKey` | raw byte of state | | 
+| `abciResponsesKey` | raw byte of ABCI Responses | | 
+| `blockStore` | raw json |  "blockStore": {"Height":32} | 
+| `H:{height}` | raw byte of block meta | H:1 |
+| `P:{height}:{index}`| raw byte of block part | P:1:0, P:32:0, P:32:1 |
+| `SC:{height}` | raw byte of block seen commit | SC:1, SC:32 | 
+| `C:{height-1}` | raw byte of block commit | C:0, SC:31 | 
+
+
+## Tendermint Data Struct Differences
+
+### Commit & SeenCommit
 
 ```
 // v0.10.0
@@ -68,7 +119,7 @@ type Commit struct {
 }
 ```
 
-H:1 ... H:14
+### BlockMeta
 
 ```
 // v0.10.0
@@ -92,7 +143,7 @@ type BlockMeta struct {
 }
 ```
 
-P:1:0 ....P:14:0 for block
+### Part
 
 ```
 // v0.10.0
@@ -118,7 +169,7 @@ type Part struct {
 }
 ```
 
-block
+### Block
 
 ```
 // v0.10.0
@@ -138,7 +189,7 @@ type Block struct {
 }
 ```
 
-state
+### State
 
 ```
 // v0.10.0
@@ -187,3 +238,7 @@ type State struct {
 	AppHash         []byte
 }
 ```
+
+## Further Improvement
+
+Wating To Be Done.

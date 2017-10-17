@@ -15,28 +15,28 @@ import (
 /*
 Usage: $ tm_view -db /path/of/db [-a get|getall|block] [-q key] [-d] [-v new|old] [-t height]
 
-// -db : db 目录，路径末尾不能有 "/"
-// [-a get|getall|block]： 读取某个 key 对应的 value | 获取所有 key 列表 | 读取区块信息
-// [-q key] ：字符串 key
-// [-d]: 是否解码二进制数据，默认 false
-// [-v new|old] ：new(新版0.10.0), old 老版(0.7.3),  默认 new
-// [-t height]: 区块高度，搭配 "-a block"参数使用， 获取某个高度的区块信息
-
-tendermint 的 blockstore.db 保存了所有 block 及 commit 信息，有 4 类 key
-H:{height} // 第 height 个块的头部， height>=1
-P:{height}:{index} // 第 height 个块的第 index 个分片, index>=0
-C:{height} // 第 height 个块的 commit 信息， height>=0
-SC:{height}  //第 height 个块的 seen commit 信息，height>=1
-
-tendermint 的 state.db 保存了区块链的最新信息, 只有 2 个 key
-stateKey
-abciResponsesKey
+// -db : db，Note: the db path cannot end with "/"
+// [-a get|getall|block]： read the value of a key | output all keyes | read block info
+// [-q key] ：key format
+// [-d]: whether decode value，default is "false"
+// [-v new|old] ：new(0.10.0), old(0.7.3), default is "new"
+// [-t height]: block height，workes with "-a block" arg to read block info at height "N"
 
 examples：
-$ tm_view -db /path/of/db -a getall //输出所有 key
-$ tm_view -db /path/of/blockstore.db -a block -t 1 -d //解码新版tendermint第一个块信息
-$ tm_view -db /path/of/blockstore.db -q "H:1" -d -v old //解码老版tendermint第一个块的头部信息
-$ tm_view -db /path/of/app/db -q "lastblock" -d //解码 app 中 key 为 lastblock 的数据
+$ tm_view -db /path/of/blockstore.db -a getall
+$ tm_view -db /path/of/blockstore.db -a block -t 1 -d
+$ tm_view -db /path/of/blockstore.db -q "H:1" -d -v old
+$ tm_view -db /path/of/state.db -q "stateKey" -d -v old
+
+| key format | value type | examples |
+| ---- |-----| ---- |
+| `stateKey` | raw byte of state | |
+| `abciResponsesKey` | raw byte of ABCI Responses | |
+| `blockStore` | raw json |  "blockStore": {"Height":32} |
+| `H:{height}` | raw byte of block meta | H:1 |
+| `P:{height}:{index}`| raw byte of block part | P:1:0, P:32:0, P:32:1 |
+| `SC:{height}` | raw byte of block seen commit | SC:1, SC:32 |
+| `C:{height-1}` | raw byte of block commit | C:0, SC:31 |
 */
 
 var dbpath = flag.String("db", os.ExpandEnv("$HOME/.tendermint")+"/trade.db", "database db")
