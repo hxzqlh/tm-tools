@@ -76,12 +76,14 @@ func get() {
 	}
 
 	if !*decode {
-		fmt.Println(string(data))
+		fmt.Printf("%X -- %s\n", data, string(data))
 		return
 	}
 
 	if *key == util.StateKey {
 		LoadState()
+	} else if *key == LastBlockKey {
+		LoadAppInfo(ldb)
 	} else if *key == util.AbciResponsesKey {
 		LoadAbciResponses()
 	} else if (*key)[0] == 'H' {
@@ -96,7 +98,7 @@ func get() {
 		height, _ := strconv.Atoi(strings.Split(*key, ":")[1])
 		LoadBlockCommit(height, prefix)
 	} else {
-		fmt.Println(string(data))
+		fmt.Printf("%X -- %s\n", data, string(data))
 	}
 }
 

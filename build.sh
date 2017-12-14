@@ -12,8 +12,8 @@ mv ${TM}/vendor ${TM}/src
 export GOPATH=${TM}:${GOPATH} 
 
 cd "$ROOT_PATH"
-#go build -v -o "build/$TM_VIEWER" cmd/viewer/*.go
-#go build -v -o "build/$TM_MIGRATOR" cmd/migrator/*.go
+go build -v -o "build/$TM_VIEWER" cmd/viewer/*.go
+go build -v -o "build/$TM_MIGRATOR" cmd/migrator/*.go
 go build -v -o "build/$TM_GENESIS" cmd/genesis/*.go
 go build -v -o "build/$TM_VALIDATOR" cmd/validator/*.go
 
