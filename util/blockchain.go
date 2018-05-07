@@ -37,7 +37,7 @@ func LoadOldBlockStoreStateJSON(ldb dbm.DB) old.BlockStoreStateJSON {
 
 func SaveNewBlockStoreStateJSON(ldb dbm.DB, totalHeight int) {
 	bsj := blockchain.BlockStoreStateJSON{
-		Height: totalHeight,
+		Height: int64(totalHeight),
 	}
 	bytes, err := json.Marshal(bsj)
 	if err != nil {
@@ -48,7 +48,7 @@ func SaveNewBlockStoreStateJSON(ldb dbm.DB, totalHeight int) {
 
 func SaveNewBlockStoreStateJSON2(batch dbm.Batch, totalHeight int) {
 	bsj := blockchain.BlockStoreStateJSON{
-		Height: totalHeight,
+		Height: int64(totalHeight),
 	}
 	bytes, err := json.Marshal(bsj)
 	if err != nil {
