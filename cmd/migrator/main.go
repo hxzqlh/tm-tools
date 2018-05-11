@@ -40,8 +40,8 @@ func main() {
 	// me priv
 	convert.OnPrivValidatorJSON(oTmRoot+"/priv_validator.json", nTmRoot+"/priv_validator.json")
 
-	// other priv
-	convert.LoadOtherPrivValidators(privDir)
+	// old privalitors
+	convert.LoadPrivValidators(privDir)
 
 	convert.TotalHeight()
 
