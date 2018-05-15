@@ -17,11 +17,13 @@ var (
 
 var stateDir = flag.String("state", os.ExpandEnv("$HOME/.tendermint")+"/data/state.db", "tendermint state db")
 var hash = flag.String("hash", "", "tendermint app hash")
+var height = flag.Int("h", 0, "last block height")
+
 var stateDb dbm.DB
 
 func main() {
 	if len(os.Args) <= 4 {
-		fmt.Printf("Usage: %s -state db -hash appHash\n", os.Args[0])
+		fmt.Printf("Usage: %s -state db -h height -hash appHash\n", os.Args[0])
 		os.Exit(0)
 	}
 
@@ -31,7 +33,12 @@ func main() {
 	defer stateDb.Close()
 
 	bytes, _ := hex.DecodeString(*hash)
+
 	s := util.LoadNewState(stateDb)
+	fmt.Printf("old height=%v hash=%X\n", s.LastBlockHeight, s.AppHash)
 	s.AppHash = bytes
+	s.LastBlockHeight = *height
+	fmt.Printf("new height=%v hash=%X\n", s.LastBlockHeight, s.AppHash)
+
 	util.SaveNewState(stateDb, s)
 }

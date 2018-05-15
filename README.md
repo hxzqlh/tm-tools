@@ -12,7 +12,7 @@ Usage: tm_migrator -old tmroot -new tmroot -priv priv_dir [-s startHeight]
 
 	-old tmroot: dir of old tendermint root
 	-new tmroot: dir of new tendermint root to store converted data
-	-priv priv_dir: dir to place other validators's `priv_validator.json`
+	-priv priv_dir: dir to place all old validators's `priv_validator.json`
 	-s startHeight: from which height to convert tendermint data, default is `1`
 ```
 

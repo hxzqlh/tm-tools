@@ -33,7 +33,7 @@ func (arr *PrivValidators) Swap(i, j int) {
 	arr.Validators[i], arr.Validators[j] = arr.Validators[j], arr.Validators[i]
 }
 
-func LoadOtherPrivValidators(folder string) {
+func LoadPrivValidators(folder string) {
 	err := filepath.Walk(folder, walkFunc)
 	if err != nil {
 		panic(err)

@@ -53,11 +53,4 @@ func OnPrivValidatorJSON(oPath, nPath string) {
 	privVali := NewPrivValidator(oPath)
 	privVali.SetFile(nPath)
 	privVali.Save()
-
-	// add me to priv_validators
-	privValidators = &PrivValidators{
-		Validators: []*types.PrivValidator{},
-	}
-
-	privValidators.Validators = append(privValidators.Validators, privVali)
 }

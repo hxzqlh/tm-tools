@@ -182,7 +182,7 @@ func LoadNewBlockCommit(ldb dbm.DB, height int, prefix string) *types.Commit {
 	r, n, err := bytes.NewReader(buf), new(int), new(error)
 	wire.ReadBinaryPtr(&blockCommit, r, 0, n, err)
 	if *err != nil {
-		panic(err)
+		panic(*err)
 	}
 	return blockCommit
 }
@@ -201,7 +201,7 @@ func LoadOldBlockCommit(ldb dbm.DB, height int, prefix string) *old.Commit {
 	r, n, err := bytes.NewReader(buf), new(int), new(error)
 	wire.ReadBinaryPtr(&blockCommit, r, 0, n, err)
 	if *err != nil {
-		panic(err)
+		panic(*err)
 	}
 	return blockCommit
 }
@@ -243,7 +243,7 @@ func LoadOldState(ldb dbm.DB) *old.State {
 	r, n, err := bytes.NewReader(buf), new(int), new(error)
 	wire.ReadBinaryPtr(&s, r, 0, n, err)
 	if *err != nil {
-		panic(err)
+		panic(*err)
 	}
 	return s
 }
@@ -254,7 +254,7 @@ func LoadNewState(ldb dbm.DB) *state.State {
 	r, n, err := bytes.NewReader(buf), new(int), new(error)
 	wire.ReadBinaryPtr(&s, r, 0, n, err)
 	if *err != nil {
-		panic(err)
+		panic(*err)
 	}
 	return s
 }
@@ -272,7 +272,7 @@ func LoadAbciResps(ldb dbm.DB) *state.ABCIResponses {
 	r, n, err := bytes.NewReader(buf), new(int), new(error)
 	wire.ReadBinaryPtr(resps, r, 0, n, err)
 	if *err != nil {
-		panic(err)
+		panic(*err)
 	}
 	return resps
 }

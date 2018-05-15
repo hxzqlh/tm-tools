@@ -9,7 +9,9 @@ OLD_TM=$(cd $(dirname $1) && pwd)
 NEW_TM=$(cd $(dirname $2) && pwd)
 PRIV_DIR=$(cd $(dirname $3) && pwd)
 
-TM=/home/hxz/gop/bin/tendermint_0.10.0
+# on your own config
+TM=/path/to/tendermint
+APP=appname
 
 $ROOT_PATH/tm_migrator -old $OLD_TM -new $NEW_TM -priv $PRIV_DIR
-TMROOT="$NEW_TM" $TM node
+TMROOT="$NEW_TM" $TM node --proxy_app=$APP
