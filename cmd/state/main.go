@@ -35,10 +35,10 @@ func main() {
 	bytes, _ := hex.DecodeString(*hash)
 
 	s := util.LoadNewState(stateDb)
-	fmt.Printf("old height=%v hash=%X\n", s.LastBlockHeight, s.AppHash)
+	fmt.Printf("old state height=%v hash=%X\n", s.LastBlockHeight, s.AppHash)
 	s.AppHash = bytes
 	s.LastBlockHeight = *height
-	fmt.Printf("new height=%v hash=%X\n", s.LastBlockHeight, s.AppHash)
+	fmt.Printf("new state height=%v hash=%X\n", s.LastBlockHeight, s.AppHash)
 
 	util.SaveNewState(stateDb, s)
 }

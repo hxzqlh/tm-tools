@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"encoding/hex"
-	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
@@ -42,15 +41,13 @@ func main() {
 	appHash, _ := hex.DecodeString(*hash)
 
 	lastBlock := LoadLastBlock(appDb)
-	bytes, _ := json.Marshal(lastBlock)
-	fmt.Println("old:", string(bytes))
+	fmt.Printf("old app height=%v hash=%X\n", lastBlock.Height, lastBlock.AppHash)
 
 	lastBlock.Height = uint64(*height)
 	lastBlock.AppHash = appHash
 	SaveLastBlock(appDb, lastBlock)
 
-	bytes, _ = json.Marshal(lastBlock)
-	fmt.Println("new:", string(bytes))
+	fmt.Printf("new app height=%v hash=%X\n", lastBlock.Height, lastBlock.AppHash)
 }
 
 // Get the last block from the db

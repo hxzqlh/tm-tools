@@ -32,8 +32,8 @@ func main() {
 	defer blockStoreDb.Close()
 
 	store := blockchain.LoadBlockStoreStateJSON(blockStoreDb)
-	log.Println("old store:", store)
+	log.Println("old blockstore:", store)
 	store.Height = *height
-	log.Println("new store:", store)
+	log.Println("new blockstore:", store)
 	store.Save(blockStoreDb)
 }

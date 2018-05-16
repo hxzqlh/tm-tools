@@ -1,9 +1,9 @@
 #!/bin/bash
 set -x
 
-VERSION=1.0.0.0
+VERSION=1.1.0.0
 ROOT_PATH=$(cd $(dirname $0) && pwd)
-PKG=tm_tools
+PKG=tm_tools_v${VERSION}
 
 cd "$ROOT_PATH"
 bash build.sh
