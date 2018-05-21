@@ -39,6 +39,9 @@ func LoadPrivValidators(folder string) {
 		panic(err)
 	}
 
+	privValidators = &PrivValidators{
+		Validators: []*types.PrivValidator{},
+	}
 	for _, path := range priv_files {
 		priv := NewPrivValidator(path)
 		// add other priv_validators
